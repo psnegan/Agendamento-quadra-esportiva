@@ -1,7 +1,7 @@
 # Agendamento-quadra-esportiva
 Sistema de agendamento de quadra esportiva
 Funcionalidades
-👤 Usuários
+ Usuários
 
 Cadastro e login de usuários
 
@@ -15,7 +15,7 @@ Cancelamento de reservas
 
 Histórico de reservas realizadas
 
-🛠️ Administrador
+ Administrador
 
 Cadastro, edição e remoção de quadras
 
