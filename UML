@@ -1,0 +1,41 @@
++----------------+
+|   Usuario      |
++----------------+
+| id             |
+| nome           |
+| email          |
+| senha          |
++----------------+
+
++----------------+
+|   Quadra       |
++----------------+
+| id             |
+| nome           |
+| tipo           |
+| preco          |
++----------------+
+
++----------------+
+|   Horario      |
++----------------+
+| id             |
+| quadra_id      |
+| data           |
+| hora           |
+| disponivel     |
++----------------+
+
++----------------+
+|   Reserva      |
++----------------+
+| id             |
+| usuario_id     |
+| horario_id     |
+| status         |
++----------------+
+
+Relacionamentos:
+Usuario 1 --- * Reserva
+Quadra 1 --- * Horario
+Horario 1 --- 1 Reserva
