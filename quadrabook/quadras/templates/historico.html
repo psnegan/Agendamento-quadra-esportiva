@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Histórico — QuadraBook{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Minhas reservas</h1>
+    <p>Histórico completo das suas reservas</p>
+  </div>
+  <a href="{{ url_for('agendar') }}" class="btn-primary">+ Nova reserva</a>
+</div>
+
+{% if reservas %}
+<div class="reservas-list">
+  {% for r in reservas %}
+  <div class="reserva-card reserva--{{ r.status }}">
+    <div class="reserva-info">
+      <div class="reserva-quadra">{{ r.quadra_nome }}</div>
+      <div class="reserva-detalhes">
+        {% set parts = r.data.split('-') %}
+        📅 {{ parts[2] }}/{{ parts[1] }}/{{ parts[0] }}
+        &nbsp;⏰ {{ r.horario_inicio }} – {{ r.horario_fim }}
+      </div>
+      <div class="reserva-preco">R$ {{ "%.2f"|format(r.preco) }}</div>
+    </div>
+    <div class="reserva-actions">
+      <span class="status-badge status--{{ r.status }}">
+        {% if r.status == 'confirmado' %}✓ Confirmado{% else %}✗ Cancelado{% endif %}
+      </span>
+      {% if r.status == 'confirmado' %}
+      <form method="POST" action="{{ url_for('cancelar', reserva_id=r.id) }}"
+            onsubmit="return confirm('Cancelar esta reserva?')">
+        <button type="submit" class="btn-danger-sm">Cancelar</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">📋</div>
+  <p>Você ainda não fez nenhuma reserva.</p>
+  <a href="{{ url_for('agendar') }}" class="btn-primary mt">Fazer primeira reserva</a>
+</div>
+{% endif %}
+{% endblock %}

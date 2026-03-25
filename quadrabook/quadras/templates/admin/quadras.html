@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Quadras — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Gerenciar Quadras</h1><p>Cadastre, edite ou remova quadras</p></div>
+  <a href="{{ url_for('admin_quadra_nova') }}" class="btn-primary">+ Nova quadra</a>
+</div>
+
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
+      <tr><th>Nome</th><th>Tipo</th><th>Cap.</th><th>Preço/h</th><th>Status</th><th>Ações</th></tr>
+    </thead>
+    <tbody>
+    {% for q in quadras %}
+    <tr>
+      <td><strong>{{ q.nome }}</strong></td>
+      <td>{{ q.tipo }}</td>
+      <td>{{ q.capacidade }}</td>
+      <td>R$ {{ "%.2f"|format(q.preco) }}</td>
+      <td>
+        <span class="status-badge {% if q.ativa %}status--confirmado{% else %}status--cancelado{% endif %}">
+          {% if q.ativa %}Ativa{% else %}Inativa{% endif %}
+        </span>
+      </td>
+      <td class="actions-cell">
+        <a href="{{ url_for('admin_quadra_editar', quadra_id=q.id) }}" class="btn-edit">Editar</a>
+        <form method="POST" action="{{ url_for('admin_quadra_remover', quadra_id=q.id) }}"
+              onsubmit="return confirm('Remover esta quadra?')" style="display:inline">
+          <button type="submit" class="btn-danger-sm">Remover</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="text-center text-muted">Nenhuma quadra cadastrada.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

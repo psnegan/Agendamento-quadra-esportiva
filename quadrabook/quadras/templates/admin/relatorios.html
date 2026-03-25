@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Relatórios — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Relatórios</h1><p>Análise de uso das quadras</p></div>
+</div>
+
+<div class="admin-grid-2">
+  <div class="admin-card">
+    <h3>📊 Receita por quadra</h3>
+    {% for nome, dados in uso_quadras.items() %}
+    <div class="bar-row">
+      <span class="bar-label">{{ nome[:25] }}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: {{ [dados.total * 8, 100]|min }}%"></div>
+      </div>
+      <span class="bar-val">{{ dados.total }}x</span>
+    </div>
+    <div class="bar-receita">R$ {{ "%.2f"|format(dados.receita) }}</div>
+    {% else %}
+    <p class="text-muted">Sem dados ainda.</p>
+    {% endfor %}
+  </div>
+
+  <div class="admin-card">
+    <h3>📅 Reservas por mês</h3>
+    {% for mes, qtd in uso_mes.items() %}
+    {% set parts = mes.split('-') %}
+    <div class="bar-row">
+      <span class="bar-label">{{ parts[1] }}/{{ parts[0] }}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: {{ [qtd * 10, 100]|min }}%"></div>
+      </div>
+      <span class="bar-val">{{ qtd }}</span>
+    </div>
+    {% else %}
+    <p class="text-muted">Sem dados ainda.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="admin-card mt">
+  <h3>⏰ Horários mais populares</h3>
+  <div class="horarios-ranking">
+    {% for horario, qtd in uso_horario.items() %}
+    <div class="rank-item">
+      <span class="rank-hora">{{ horario }}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: {{ [qtd * 15, 100]|min }}%"></div>
+      </div>
+      <span class="bar-val">{{ qtd }} reservas</span>
+    </div>
+    {% else %}
+    <p class="text-muted">Sem dados ainda.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

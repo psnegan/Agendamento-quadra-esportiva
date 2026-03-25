@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Usuários — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Usuários</h1><p>Controle de usuários cadastrados</p></div>
+</div>
+
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
+      <tr><th>Nome</th><th>E-mail</th><th>Papel</th><th>Reservas</th><th>Cadastrado em</th><th>Ação</th></tr>
+    </thead>
+    <tbody>
+    {% for u in usuarios %}
+    {% set parts = u.criado_em[:10].split('-') %}
+    <tr>
+      <td><strong>{{ u.nome }}</strong></td>
+      <td>{{ u.email }}</td>
+      <td>
+        <span class="role-badge role--{{ u.papel }}">
+          {% if u.papel == 'admin' %}👑 Admin{% else %}👤 Usuário{% endif %}
+        </span>
+      </td>
+      <td>{{ u.total_reservas }}</td>
+      <td>{{ parts[2] }}/{{ parts[1] }}/{{ parts[0] }}</td>
+      <td>
+        {% if u.papel != 'admin' %}
+        <form method="POST" action="{{ url_for('admin_usuario_remover', usuario_id=u.id) }}"
+              onsubmit="return confirm('Remover este usuário?')">
+          <button type="submit" class="btn-danger-sm">Remover</button>
+        </form>
+        {% else %}—{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

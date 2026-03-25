@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Quadras — QuadraBook{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Quadras disponíveis</h1>
+    <p>Escolha uma quadra e agende seu horário</p>
+  </div>
+  <a href="{{ url_for('agendar') }}" class="btn-primary">+ Nova reserva</a>
+</div>
+
+<div class="quadras-grid">
+  {% for quadra in quadras %}
+  <div class="quadra-card">
+    <div class="quadra-banner quadra-banner--{{ quadra.imagem }}">
+      <span class="quadra-tipo-badge">{{ quadra.tipo }}</span>
+    </div>
+    <div class="quadra-body">
+      <h3>{{ quadra.nome }}</h3>
+      <p>{{ quadra.descricao }}</p>
+      <div class="quadra-meta">
+        <span>👥 {{ quadra.capacidade }} pessoas</span>
+        <span class="quadra-preco">R$ {{ "%.2f"|format(quadra.preco) }}/h</span>
+      </div>
+      <a href="{{ url_for('agendar') }}?quadra_id={{ quadra.id }}" class="btn-primary btn-block mt">Reservar agora</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">🏟️</div>
+    <p>Nenhuma quadra disponível no momento.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Admin — QuadraBook{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Dashboard</h1><p>Visão geral do sistema</p></div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card stat-green">
+    <div class="stat-value">{{ total_reservas }}</div>
+    <div class="stat-label">Reservas ativas</div>
+  </div>
+  <div class="stat-card stat-red">
+    <div class="stat-value">{{ total_canceladas }}</div>
+    <div class="stat-label">Canceladas</div>
+  </div>
+  <div class="stat-card stat-blue">
+    <div class="stat-value">{{ total_usuarios }}</div>
+    <div class="stat-label">Usuários cadastrados</div>
+  </div>
+  <div class="stat-card stat-yellow">
+    <div class="stat-value">R$ {{ "%.0f"|format(receita_total) }}</div>
+    <div class="stat-label">Receita total</div>
+  </div>
+</div>
+
+<div class="admin-grid-2">
+  <div class="admin-card">
+    <h3>Próximas reservas</h3>
+    {% if proximas %}
+    <table class="admin-table">
+      <thead><tr><th>Quadra</th><th>Data</th><th>Horário</th><th>Usuário</th></tr></thead>
+      <tbody>
+      {% for r in proximas %}
+      {% set parts = r.data.split('-') %}
+      <tr>
+        <td>{{ r.quadra_nome }}</td>
+        <td>{{ parts[2] }}/{{ parts[1] }}/{{ parts[0] }}</td>
+        <td>{{ r.horario_inicio }}</td>
+        <td>{{ r.usuario_nome }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted">Nenhuma reserva futura.</p>
+    {% endif %}
+  </div>
+
+  <div class="admin-card">
+    <h3>Uso por quadra</h3>
+    {% for nome, qtd in uso_quadras.items() %}
+    <div class="bar-row">
+      <span class="bar-label">{{ nome }}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: {{ [qtd * 10, 100]|min }}%"></div>
+      </div>
+      <span class="bar-val">{{ qtd }}</span>
+    </div>
+    {% else %}
+    <p class="text-muted">Sem dados ainda.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="admin-card mt">
+  <h3>Quadras cadastradas</h3>
+  <table class="admin-table">
+    <thead><tr><th>Nome</th><th>Tipo</th><th>Capacidade</th><th>Preço/h</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for q in quadras %}
+    <tr>
+      <td>{{ q.nome }}</td>
+      <td>{{ q.tipo }}</td>
+      <td>{{ q.capacidade }} pessoas</td>
+      <td>R$ {{ "%.2f"|format(q.preco) }}</td>
+      <td><span class="status-badge {% if q.ativa %}status--confirmado{% else %}status--cancelado{% endif %}">
+        {% if q.ativa %}Ativa{% else %}Inativa{% endif %}
+      </span></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuadraBook — Reserve sua Quadra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="landing">
+
+<div class="flash-container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+<div class="landing-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="grid-overlay"></div>
+</div>
+
+<nav class="landing-nav">
+  <div class="brand"><span class="brand-icon">⬡</span> QuadraBook</div>
+  <div class="nav-actions">
+    <a href="{{ url_for('login') }}" class="btn-ghost">Entrar</a>
+    <a href="{{ url_for('cadastro') }}" class="btn-primary">Cadastrar</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">🏟️ Plataforma de Reservas</div>
+  <h1 class="hero-title">Reserve sua quadra<br><span class="accent">em segundos.</span></h1>
+  <p class="hero-sub">Futebol, tênis, basquete e vôlei. Escolha o horário, confirme e jogue.</p>
+  <div class="hero-cta">
+    <a href="{{ url_for('cadastro') }}" class="btn-primary btn-lg">Começar agora →</a>
+    <a href="{{ url_for('login') }}" class="btn-ghost btn-lg">Já tenho conta</a>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature-card">
+    <div class="feature-icon">📅</div>
+    <h3>Agendamento fácil</h3>
+    <p>Escolha quadra, data e horário. Confirmação instantânea.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">⚡</div>
+    <h3>Horários em tempo real</h3>
+    <p>Veja quais horários estão disponíveis antes de reservar.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📋</div>
+    <h3>Histórico completo</h3>
+    <p>Todas as suas reservas organizadas em um só lugar.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">❌</div>
+    <h3>Cancelamento simples</h3>
+    <p>Cancelou os planos? Cancele a reserva com um clique.</p>
+  </div>
+</section>
+
+</body>
+</html>

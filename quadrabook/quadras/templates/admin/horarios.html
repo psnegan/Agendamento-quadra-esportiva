@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Horários — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Gerenciar Horários</h1><p>Horários disponíveis para reserva</p></div>
+</div>
+
+<div class="admin-grid-2">
+  <div class="admin-card">
+    <h3>Adicionar horário</h3>
+    <form method="POST" action="{{ url_for('admin_horario_novo') }}" class="booking-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Início</label>
+          <input type="time" name="inicio" required>
+        </div>
+        <div class="form-group">
+          <label>Fim</label>
+          <input type="time" name="fim" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">+ Adicionar</button>
+    </form>
+  </div>
+
+  <div class="admin-card">
+    <h3>Horários cadastrados</h3>
+    <div class="horarios-admin-list">
+      {% for h in horarios %}
+      <div class="horario-admin-item">
+        <span>⏰ {{ h.inicio }} – {{ h.fim }}</span>
+        <form method="POST" action="{{ url_for('admin_horario_remover', horario_id=h.id) }}"
+              onsubmit="return confirm('Remover este horário?')">
+          <button type="submit" class="btn-danger-sm">✕</button>
+        </form>
+      </div>
+      {% else %}
+      <p class="text-muted">Nenhum horário cadastrado.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

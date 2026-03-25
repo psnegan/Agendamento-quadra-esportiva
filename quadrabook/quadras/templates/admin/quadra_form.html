@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}{% if quadra %}Editar{% else %}Nova{% endif %} Quadra — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>{% if quadra %}Editar Quadra{% else %}Nova Quadra{% endif %}</h1>
+    <p>{% if quadra %}Altere os dados da quadra{% else %}Preencha os dados para cadastrar{% endif %}</p>
+  </div>
+  <a href="{{ url_for('admin_quadras') }}" class="btn-ghost">← Voltar</a>
+</div>
+
+<div class="form-page">
+  <form method="POST" class="booking-form">
+    <div class="form-group">
+      <label>Nome da quadra</label>
+      <input type="text" name="nome" value="{{ quadra.nome if quadra else '' }}" placeholder="Ex: Quadra de Futebol 1" required>
+    </div>
+    <div class="form-group">
+      <label>Tipo</label>
+      <select name="tipo" required>
+        <option value="">Selecione...</option>
+        {% for tipo in ['Futebol', 'Tênis', 'Basquete', 'Vôlei', 'Padel', 'Squash', 'Outro'] %}
+        <option value="{{ tipo }}" {% if quadra and quadra.tipo == tipo %}selected{% endif %}>{{ tipo }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Descrição</label>
+      <textarea name="descricao" rows="3" placeholder="Detalhes da quadra...">{{ quadra.descricao if quadra else '' }}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Capacidade (pessoas)</label>
+        <input type="number" name="capacidade" value="{{ quadra.capacidade if quadra else '' }}" min="1" required>
+      </div>
+      <div class="form-group">
+        <label>Preço por hora (R$)</label>
+        <input type="number" name="preco" value="{{ quadra.preco if quadra else '' }}" min="0" step="0.01" required>
+      </div>
+    </div>
+    {% if quadra %}
+    <div class="form-group form-check">
+      <label>
+        <input type="checkbox" name="ativa" {% if quadra.ativa %}checked{% endif %}> Quadra ativa
+      </label>
+    </div>
+    {% endif %}
+    <button type="submit" class="btn-primary btn-lg">
+      {% if quadra %}Salvar alterações{% else %}Cadastrar quadra{% endif %} →
+    </button>
+  </form>
+</div>
+{% endblock %}

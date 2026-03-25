@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Reservas — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Todas as Reservas</h1><p>Gerenciamento de reservas realizadas</p></div>
+</div>
+
+<div class="admin-card">
+  <table class="admin-table">
+    <thead>
+      <tr><th>Usuário</th><th>Quadra</th><th>Data</th><th>Horário</th><th>Valor</th><th>Status</th><th>Ação</th></tr>
+    </thead>
+    <tbody>
+    {% for r in reservas %}
+    {% set parts = r.data.split('-') %}
+    <tr>
+      <td>{{ r.usuario_nome }}</td>
+      <td>{{ r.quadra_nome }}</td>
+      <td>{{ parts[2] }}/{{ parts[1] }}/{{ parts[0] }}</td>
+      <td>{{ r.horario_inicio }} – {{ r.horario_fim }}</td>
+      <td>R$ {{ "%.2f"|format(r.preco) }}</td>
+      <td>
+        <span class="status-badge status--{{ r.status }}">
+          {% if r.status == 'confirmado' %}✓ Confirmado{% else %}✗ Cancelado{% endif %}
+        </span>
+      </td>
+      <td>
+        {% if r.status == 'confirmado' %}
+        <form method="POST" action="{{ url_for('admin_cancelar_reserva', reserva_id=r.id) }}"
+              onsubmit="return confirm('Cancelar esta reserva?')">
+          <button type="submit" class="btn-danger-sm">Cancelar</button>
+        </form>
+        {% else %}—{% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="text-center text-muted">Nenhuma reserva encontrada.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

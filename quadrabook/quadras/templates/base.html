@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}QuadraBook{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+{% if session.usuario_id %}
+<nav class="navbar">
+  <a class="navbar-brand" href="{{ url_for('home') if session.papel != 'admin' else url_for('admin_dashboard') }}">
+    <span class="brand-icon">⬡</span> QuadraBook
+  </a>
+  <div class="navbar-links">
+    {% if session.papel == 'admin' %}
+      <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('admin_quadras') }}">Quadras</a>
+      <a href="{{ url_for('admin_horarios') }}">Horários</a>
+      <a href="{{ url_for('admin_reservas') }}">Reservas</a>
+      <a href="{{ url_for('admin_usuarios') }}">Usuários</a>
+      <a href="{{ url_for('admin_relatorios') }}">Relatórios</a>
+    {% else %}
+      <a href="{{ url_for('home') }}">Quadras</a>
+      <a href="{{ url_for('agendar') }}">Agendar</a>
+      <a href="{{ url_for('historico') }}">Histórico</a>
+    {% endif %}
+  </div>
+  <div class="navbar-user">
+    <span class="user-chip">{{ session.nome.split()[0] }}</span>
+    <a href="{{ url_for('logout') }}" class="btn-logout">Sair</a>
+  </div>
+</nav>
+{% endif %}
+
+<div class="flash-container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

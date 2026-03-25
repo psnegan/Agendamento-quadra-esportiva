@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %}Agendar — QuadraBook{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Nova reserva</h1>
+    <p>Preencha os dados para agendar sua quadra</p>
+  </div>
+</div>
+
+<div class="form-page">
+  <form method="POST" class="booking-form" id="bookingForm">
+    <div class="form-section">
+      <h3>1. Escolha a quadra</h3>
+      <div class="form-group">
+        <label>Quadra</label>
+        <select name="quadra_id" id="quadraSelect" required>
+          <option value="">Selecione uma quadra...</option>
+          {% for q in quadras %}
+          <option value="{{ q.id }}" {% if q.id == quadra_selecionada %}selected{% endif %}
+            data-preco="{{ q.preco }}" data-tipo="{{ q.tipo }}">
+            {{ q.nome }} — R$ {{ "%.2f"|format(q.preco) }}/h
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>2. Escolha a data</h3>
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" name="data" id="dataInput" required min="{{ now }}">
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>3. Escolha o horário</h3>
+      <div id="horariosContainer" class="horarios-grid">
+        <p class="horarios-hint">Selecione uma quadra e uma data para ver os horários disponíveis.</p>
+      </div>
+      <input type="hidden" name="horario_id" id="horarioId">
+    </div>
+
+    <div class="booking-summary" id="summary" style="display:none">
+      <h3>Resumo da reserva</h3>
+      <div class="summary-row"><span>Quadra</span><span id="sumQuadra">—</span></div>
+      <div class="summary-row"><span>Data</span><span id="sumData">—</span></div>
+      <div class="summary-row"><span>Horário</span><span id="sumHorario">—</span></div>
+      <div class="summary-row summary-total"><span>Total</span><span id="sumPreco">—</span></div>
+    </div>
+
+    <button type="submit" class="btn-primary btn-lg btn-block" id="btnConfirmar" disabled>
+      Confirmar reserva →
+    </button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('dataInput').min = today;
+
+async function carregarHorarios() {
+  const quadraId = document.getElementById('quadraSelect').value;
+  const data     = document.getElementById('dataInput').value;
+  const container = document.getElementById('horariosContainer');
+  const btn = document.getElementById('btnConfirmar');
+
+  document.getElementById('horarioId').value = '';
+  btn.disabled = true;
+  document.getElementById('summary').style.display = 'none';
+
+  if (!quadraId || !data) {
+    container.innerHTML = '<p class="horarios-hint">Selecione uma quadra e uma data para ver os horários disponíveis.</p>';
+    return;
+  }
+
+  container.innerHTML = '<p class="horarios-hint loading">Carregando horários...</p>';
+
+  const res  = await fetch(`/api/horarios-livres?quadra_id=${quadraId}&data=${data}`);
+  const list = await res.json();
+
+  if (list.length === 0) {
+    container.innerHTML = '<p class="horarios-hint">Nenhum horário disponível nesta data.</p>';
+    return;
+  }
+
+  container.innerHTML = list.map(h => `
+    <div class="horario-btn" onclick="selecionarHorario('${h.id}', '${h.inicio}', '${h.fim}', this)">
+      ${h.inicio} – ${h.fim}
+    </div>
+  `).join('');
+}
+
+function selecionarHorario(id, inicio, fim, el) {
+  document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('horarioId').value = id;
+
+  const quadraSelect = document.getElementById('quadraSelect');
+  const opt = quadraSelect.options[quadraSelect.selectedIndex];
+  const dataVal = document.getElementById('dataInput').value;
+  const [ano, mes, dia] = dataVal.split('-');
+
+  document.getElementById('sumQuadra').textContent  = opt.text.split(' —')[0];
+  document.getElementById('sumData').textContent    = `${dia}/${mes}/${ano}`;
+  document.getElementById('sumHorario').textContent = `${inicio} – ${fim}`;
+  document.getElementById('sumPreco').textContent   = `R$ ${parseFloat(opt.dataset.preco).toFixed(2).replace('.', ',')}`;
+  document.getElementById('summary').style.display  = 'block';
+  document.getElementById('btnConfirmar').disabled  = false;
+}
+
+document.getElementById('quadraSelect').addEventListener('change', carregarHorarios);
+document.getElementById('dataInput').addEventListener('change', carregarHorarios);
+
+// Auto-carregar se quadra já selecionada
+window.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('quadraSelect').value) carregarHorarios();
+});
+</script>
+{% endblock %}
