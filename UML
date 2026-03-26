@@ -1,41 +1,36 @@
-+----------------+
-|   Usuario      |
-+----------------+
-| id             |
-| nome           |
-| email          |
-| senha          |
-+----------------+
++----------------------+
+|        Quadras       |
++----------------------+
+| - app.py             |
+| - requirements.txt   |
++----------+-----------+
+           |
+           |
+   +-------+--------+-------------------+
+   |                |                   |
+   v                v                   v
 
-+----------------+
-|   Quadra       |
-+----------------+
-| id             |
-| nome           |
-| tipo           |
-| preco          |
-+----------------+
-
-+----------------+
-|   Horario      |
-+----------------+
-| id             |
-| quadra_id      |
-| data           |
-| hora           |
-| disponivel     |
-+----------------+
-
-+----------------+
-|   Reserva      |
-+----------------+
-| id             |
-| usuario_id     |
-| horario_id     |
-| status         |
-+----------------+
-
-Relacionamentos:
-Usuario 1 --- * Reserva
-Quadra 1 --- * Horario
-Horario 1 --- 1 Reserva
++---------+     +---------+       +-------------+
+|  data   |     | static  |       | templates   |
++---------+     +---------+       +-------------+
+| usuarios.json | css/     |       | base.html  |
+| quadras.json  | style.css|       | index.html |
+| horarios.json | js/      |       | login.html |
+| reservas.json | main.js  |       | cadastro.html |
++---------+     +---------+       | home.html  |
+                                 | agendar.html |
+                                 | historico.html |
+                                 +-------+-----+
+                                         |
+                                         v
+                                  +-------------+
+                                  |   admin     |
+                                  +-------------+
+                                  | dashboard.html |
+                                  | quadras.html   |
+                                  | quadra_form.html |
+                                  | horarios.html   |
+                                  | reservas.html   |
+                                  | usuarios.html   |
+                                  | relatorios.html |
+                                  +-----------------+
