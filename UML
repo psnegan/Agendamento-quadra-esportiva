@@ -1,0 +1,77 @@
++----------------------+
+|       Usuario        |
++----------------------+
+| - id: int            |
+| - nome: string       |
+| - email: string      |
+| - senha: string      |
+| - tipo: string       |
++----------------------+
+| + login(): bool      |
+| + logout(): void     |
+| + cadastrar(): void  |
++----------------------+
+
+            |
+            | 1
+            |-------------------*
+                               
++--------------------------+
+|      Agendamento         |
++--------------------------+
+| - id: int                |
+| - data: date             |
+| - horario: time          |
+| - status: string         |
+| - usuario_id: int        |
+| - servico_id: int        |
++--------------------------+
+| + criar(): void          |
+| + cancelar(): void       |
+| + atualizar(): void      |
++--------------------------+
+
+            |
+            | * ----------- 1
+            |
++--------------------------+
+|        Servico           |
++--------------------------+
+| - id: int                |
+| - nome: string           |
+| - descricao: string      |
+| - duracao: int           |
+| - status: string         |
++--------------------------+
+| + listar(): array        |
++--------------------------+
+
++--------------------------+
+|       Pagamento          |
++--------------------------+
+| - id: int                |
+| - valor: float           |
+| - metodo: string         |
+| - status: string         |
+| - agendamento_id: int    |
++--------------------------+
+| + pagar(): bool          |
+| + verificarStatus():void |
++--------------------------+
+
+            |
+            | 1 ----------- 1
+            |
++--------------------------+
+|      Agendamento         |
++--------------------------+
+
++--------------------------+
+|         Admin            |
++--------------------------+
+| (herda de Usuario)       |
++--------------------------+
+| + gerenciarUsuarios():void|
+| + gerenciarServicos():void|
+| + verRelatorios():void    |
++--------------------------+
