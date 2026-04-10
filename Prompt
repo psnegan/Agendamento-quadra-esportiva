@@ -1,0 +1,17 @@
+Construa um site de agendamento de quadra esportiva com HTML,CSS e javascript, integre ele ao Python de maneira que seja fácil de entender, quero que tenha fácil de integrar depois ao MYSQL Workbench e siga as instruções abaixo:
+# Agendamento-quadra-esportiva
+Sistema de agendamento de quadra esportiva
+Funcionalidades
+ Usuários
+Cadastro e login de usuários
+Visualização de quadras disponíveis
+Consulta de horários livres
+Agendamento de quadra
+Cancelamento de reservas
+Histórico de reservas realizadas
+ Administrador
+Cadastro, edição e remoção de quadras
+Gerenciamento de horários disponíveis
+Visualização de reservas realizadas
+Controle de usuários
+Relatórios de uso das quadras
