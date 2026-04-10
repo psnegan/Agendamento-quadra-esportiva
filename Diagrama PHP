@@ -1,0 +1,9 @@
+quadra_php/
+├── index.html              ← Frontend (HTML + CSS + JS) estilo industrial/esportivo
+├── api/index.php           ← Roteador REST PHP (todas as chamadas chegam aqui)
+├── config/database.php     ← Conexão PDO (SQLite ou MySQL)
+├── classes/
+│   ├── Usuario.php         ← Autenticação, CRUD de usuários
+│   ├── Quadra.php          ← Quadras, horários disponíveis
+│   └── Reserva.php         ← Agendamentos, cancelamentos, relatório
+└── data/quadra.db          ← Criado automaticamente (SQLite)
